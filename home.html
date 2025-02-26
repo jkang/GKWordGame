@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>词根记忆单词 - 初二英语</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #6e8efb;
+        }
+        
+        .unit-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .unit-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .unit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .unit-card h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .unit-card .progress {
+            height: 10px;
+            background: #e6e9ef;
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .unit-card .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e6e9ef;
+        }
+        
+        .game-title {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        
+        .game-score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #6e8efb;
+        }
+        
+        .word-root-container {
+            margin-bottom: 30px;
+        }
+        
+        .word-root {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fc;
+            border-radius: 8px;
+            border-left: 4px solid #6e8efb;
+        }
+        
+        .word-root h3 {
+            margin-bottom: 10px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .word-root h3 span {
+            color: #6e8efb;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .word-root p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .word-item {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .word-item:hover {
+            background: #6e8efb;
+            color: white;
+        }
+        
+        .game-activity {
+            margin-top: 30px;
+        }
+        
+        .activity-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .matching-game {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .match-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .match-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            cursor: grab;
+            text-align: center;
+            font-weight: 500;
+            border: 2px solid transparent;
+        }
+        
+        .match-item.selected {
+            border-color: #6e8efb;
+            background: #f0f5ff;
+        }
+        
+        .match-item.matched {
+            background: #e6ffe6;
+            border-color: #4caf50;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5d7ce4, #9666d8);
+        }
+        
+        .btn-secondary {
+            background: #e6e9ef;
+            color: #666;
+        }
+        
+        .btn-secondary:hover {
+            background: #d9dde5;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .modal-message {
+            margin-bottom: 25px;
+            color: #666;
+        }
+        
+        .star-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>词根记忆单词</h1>
+            <p>通过词根词缀记忆英语单词，让学习更有趣！</p>
+        </header>
+        
+        <div class="user-info">
+            <div class="user-name">学习者: <span id="userName">同学</span></div>
+            <div class="score">总积分: <span id="totalScore">0</span></div>
+        </div>
+        
+        <div class="unit-selection" id="unitSelection">
+            <div class="unit-card" data-unit="1" onclick="selectUnit(1)">
+                <h3>Unit 1</h3>
+                <p>School Life</p>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="unit-card" data-unit="2" onclick="selectUnit(2)">
+                <h3>Unit 2</h3>
+                <p>Healthy Habits</p>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="unit-card" data-unit="3" onclick="selectUnit(3)">
+                <h3>Unit 3</h3>
+                <p>Traveling</p>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="unit-card" data-unit="4" onclick="selectUnit(4)">
+                <h3>Unit 4</h3>
+                <p>Adventures</p>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-container" id="gameContainer">
+            <div class="game-header">
+                <div class="game-title" id="gameTitle">Unit 1: School Life</div>
+                <div class="game-score">关卡积分: <span id="levelScore">0</span></div>
+            </div>
+            
+            <div class="word-root-container" id="wordRootContainer">
+                <h2>本单元词根</h2>
+                <!-- 词根内容将通过 JavaScript 动态生成 -->
+            </div>
+            
+            <div class="game-activity" id="gameActivity">
+                <h2 class="activity-title">词根匹配游戏</h2>
+                <p>将词根与其含义匹配起来：</p>
+                
+                <div class="matching-game" id="matchingGame">
+                    <div class="match-column" id="rootColumn">
+                        <!-- 匹配项将通过 JavaScript 动态生成 -->
+                    </div>
+                    
+                    <div class="match-column" id="meaningColumn">
+                        <!-- 匹配项将通过 JavaScript 动态生成 -->
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="backToUnits()">返回单元列表</button>
+                    <button class="btn btn-primary" onclick="checkMatches()">检查答案</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="resultModal">
+            <div class="modal-content">
+                <h2 class="modal-title">恭喜你！</h2>
+                <div class="star-container">
+                    ★★★
+                </div>
+                <p class="modal-message" id="modalMessage">你已经掌握了这些词根！获得了 <span id="earnedPoints">30</span> 积分。</p>
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="closeModal()">继续学习</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        let gameState = {
+            currentUnit: null,
+            score: 0,
+            unitProgress: [0, 0, 0, 0],
+            selectedItems: []
+        };
+        
+        // 单元数据
+        const unitData = [
+            {
+                id: 1,
+                title: "Unit 1: School Life",
+                wordRoots: [
+                    { 
+                        root: "dict", 
+                        meaning: "说，断言", 
+                        origin: "源自拉丁语dicere，表示"说，讲"", 
+                        words: ["dictionary", "predict", "dictation"]
+                    },
+                    { 
+                        root: "scrib/script", 
+                        meaning: "写", 
+                        origin: "源自拉丁语scribere，表示"写"", 
+                        words: ["describe", "script", "prescription"]
+                    }
+                ],
+                matchingGame: [
+                    { id: "1", root: "dict", meaning: "说，断言" },
+                    { id: "2", root: "scrib/script", meaning: "写" },
+                    { id: "3", root: "port", meaning: "携带，运输" },
+                    { id: "4", root: "spect", meaning: "看" }
+                ]
+            },
+            {
+                id: 2,
+                title: "Unit 2: Healthy Habits",
+                wordRoots: [
+                    { 
+                        root: "bio", 
+                        meaning: "生命", 
+                        origin: "源自希腊语bios，表示"生命"", 
+                        words: ["biology", "biography", "antibiotic"]
+                    },
+                    { 
+                        root: "scope", 
+                        meaning: "看，观察", 
+                        origin: "源自希腊语skopein，表示"看，观察"", 
+                        words: ["microscope", "telescope", "periscope"]
+                    }
+                ],
+                matchingGame: [
+                    { id: "1", root: "bio", meaning: "生命" },
+                    { id: "2", root: "scope", meaning: "看，观察" },
+                    { id: "3", root: "phon", meaning: "声音" },
+                    { id: "4", root: "therm", meaning: "热" }
+                ]
+            },
+            {
+                id: 3,
+                title: "Unit 3: Traveling",
+                wordRoots: [
+                    { 
+                        root: "port", 
+                        meaning: "携带，运输", 
+                        origin: "源自拉丁语portare，表示"携带"", 
+                        words: ["transport", "import", "export"]
+                    },
+                    { 
+                        root: "terr", 
+                        meaning: "土地，地球", 
+                        origin: "源自拉丁语terra，表示"地球"", 
+                        words: ["territory", "terrain", "terrace"]
+                    }
+                ],
+                matchingGame: [
+                    { id: "1", root: "port", meaning: "携带，运输" },
+                    { id: "2", root: "terr", meaning: "土地，地球" },
+                    { id: "3", root: "aer", meaning: "空气" },
+                    { id: "4", root: "nav", meaning: "船" }
+                ]
+            },
+            {
+                id: 4,
+                title: "Unit 4: Adventures",
+                wordRoots: [
+                    { 
+                        root: "aqu", 
+                        meaning: "水", 
+                        origin: "源自拉丁语aqua，表示"水"", 
+                        words: ["aquarium", "aquatic", "aqueduct"]
+                    },
+                    { 
+                        root: "spect", 
+                        meaning: "看", 
+                        origin: "源自拉丁语spectare，表示"看，观察"", 
+                        words: ["inspect", "spectator", "perspective"]
+                    }
+                ],
+                matchingGame: [
+                    { id: "1", root: "aqu", meaning: "水" },
+                    { id: "2", root: "spect", meaning: "看" },
+                    { id: "3", root: "ven/vent", meaning: "来" },
+                    { id: "4", root: "mount", meaning: "山" }
+                ]
+            }
+        ];
+        
+        // 初始化游戏
+        function initGame() {
+            updateScore();
+        }
+        
+        // 更新分数显示
+        function updateScore() {
+            document.getElementById('totalScore').textContent = gameState.score;
+        }
+        
+        // 选择单元
+        function selectUnit(unitId) {
+            gameState.currentUnit = unitId;
+            const unit = unitData.find(u => u.id === unitId);
+            
+            // 更新游戏界面
+            document.getElementById('gameTitle').textContent = unit.title;
+            document.getElementById('levelScore').textContent = '0';
+            
+            // 渲染词根内容
+            renderWordRoots(unit);
+            
+            // 渲染匹配游戏
+            renderMatchingGame(unit);
+            
+            // 显示游戏容器，隐藏单元选择
+            document.getElementById('unitSelection').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'block';
+        }
+        
+        // 渲染词根内容
+        function renderWordRoots(unit) {
+            const container = document.getElementById('wordRootContainer');
+            let html = '<h2>本单元词根</h2>';
+            
+            unit.wordRoots.forEach(root => {
+                html += `
+                <div class="word-root">
+                    <h3><span>${root.root}</span> 表示"${root.meaning}"</h3>
+                    <p>${root.origin}</p>
+                    <div class="word-list">
+                        ${root.words.map(word => `<div class="word-item">${word}</div>`).join('')}
+                    </div>
+                </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // 渲染匹配游戏
+        function renderMatchingGame(unit) {
+            const rootColumn = document.getElementById('rootColumn');
+            const meaningColumn = document.getElementById('meaningColumn');
+            
+            // 清空现有内容
+            rootColumn.innerHTML = '';
+            meaningColumn.innerHTML = '';
+            
+            // 重置选择
+            gameState.selectedItems = [];
+            
+            // 添加匹配项
+            unit.matchingGame.forEach(item => {
+                const rootItem = document.createElement('div');
+                rootItem.className = 'match-item';
+                rootItem.setAttribute('data-id', item.id);
+                rootItem.textContent = item.root;
+                rootItem.onclick = function() { selectItem(this); };
+                rootColumn.appendChild(rootItem);
+                
+                const meaningItem = document.createElement('div');
+                meaningItem.className = 'match-item';
+                meaningItem.setAttribute('data-id', item.id);
+                meaningItem.textContent = item.meaning;
+                meaningItem.onclick = function() { selectItem(this); };
+                meaningColumn.appendChild(meaningItem);
+            });
+        }
+        
+        // 返回单元列表
+        function backToUnits() {
+            document.getElementById('unitSelection').style.display = 'grid';
+            document.getElementById('gameContainer').style.display = 'none';
+        }
+        
+        // 选择匹配项
+        function selectItem(item) {
+            // 如果已经匹配成功，不能再选
+            if (item.classList.contains('matched')) {
+                return;
+            }
+            
+            // 如果已选择了同一列的项目，取消选择
+            const columnId = item.parentElement.id;
+            for (let i = 0; i < gameState.selectedItems.length; i++) {
+                if (gameState.selectedItems[i].parentElement.id === columnId) {
+                    gameState.selectedItems[i].classList.remove('selected');
+                    gameState.selectedItems.splice(i, 1);
+                    break;
+                }
+            }
+            
+            // 添加新选择
+            item.classList.add('selected');
+            gameState.selectedItems.push(item);
+            
+            // 如果选择了两项，检查是否匹配
+            if (gameState.selectedItems.length === 2) {
+                const item1 = gameState.selectedItems[0];
+                const item2 = gameState.selectedItems[1];
+                
+                if (item1.getAttribute('data-id') === item2.getAttribute('data-id')) {
+                    // 匹配成功
+                    item1.classList.remove('selected');
+                    item2.classList.remove('selected');
+                    item1.classList.add('matched');
+                    item2.classList.add('matched');
+                    
+                    // 增加积分
+                    document.getElementById('levelScore').textContent = 
+                        parseInt(document.getElementById('levelScore').textContent) + 10;
+                    
+                    // 清空选择
+                    gameState.selectedItems = [];
+                    
+                    // 检查是否全部匹配完成
+                    checkGameCompletion();
+                }
+            }
+            
+            // 如果选择超过两项，移除最早的选择
+            if (gameState.selectedItems.length > 2) {
+                const oldestItem = gameState.selectedItems.shift();
+                oldestItem.classList.remove('selected');
+            }
+        }
+        
+        // 检查所有匹配
+        function checkMatches() {
+            const items = document.querySelectorAll('.match-item');
+            let allMatched = true;
+            
+            // 清除当前选择
+            gameState.selectedItems.forEach(item => {
+                item.classList.remove('selected');
+            });
+            gameState.selectedItems = [];
+            
+            // 获取当前单元数据
+            const unit = unitData.find(u => u.id === gameState.currentUnit);
+            
+            // 检查所有项目是否已匹配
+            items.forEach(item => {
+                const id = item.getAttribute('data-id');
+                const column = item.parentElement.id;
+                
+                // 获取对应列的项目
+                const otherColumn = column === 'rootColumn' ? 'meaningColumn' : 'rootColumn';
+                const otherItems = document.querySelectorAll(`#${otherColumn} .match-item`);
+                
+                // 查找匹配项
+                let matchFound = false;
+                otherItems.forEach(otherItem => {
+                    if (otherItem.getAttribute('data-id') === id) {
+                        // 标记匹配
+                        item.classList.add('matched');
+                        otherItem.classList.add('matched');
+                        matchFound = true;
+                    }
+                });
+                
+                if (!matchFound && !item.classList.contains('matched')) {
+                    allMatched = false;
+                }
+            });
+            
+            // 如果所有项目都匹配了，显示完成对话框
+            if (allMatched) {
+                showCompletionModal();
+            }
+        }
+        
+        // 检查游戏是否完成
+        function checkGameCompletion() {
+            const rootItems = document.querySelectorAll('#rootColumn .match-item');
+            let allMatched = true;
+            
+            rootItems.forEach(item => {
+                if (!item.classList.contains('matched')) {
+                    allMatched = false;
+                }
+            });
+            
+            if (allMatched) {
+                showCompletionModal();
+            }
+        }
+        
+        // 显示完成对话框
+        function showCompletionModal() {
+            const earnedPoints = parseInt(document.getElementById('levelScore').textContent);
+            document.getElementById('earnedPoints').textContent = earnedPoints;
+            
+            // 更新总分
+            gameState.score += earnedPoints;
+            updateScore();
+            
+            // 更新单元进度
+            if (gameState.currentUnit && gameState.currentUnit >= 1 && gameState.currentUnit <= 4) {
+                const unitIndex = gameState.currentUnit - 1;
+                gameState.unitProgress[unitIndex] = 100;
+                document.querySelector(`.unit-card[data-unit="${gameState.currentUnit}"] .progress-bar`).style.width = '100%';
+            }
+            
+            // 显示对话框
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+        
+        // 关闭对话框
+        function closeModal() {
+            document.getElementById('resultModal').style.display = 'none';
+            backToUnits();
+        }
+        
+        // 初始化游戏
+        window.onload = initGame;
+    </script>
+</body>
+</html>
